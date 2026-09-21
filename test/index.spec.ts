@@ -2,10 +2,10 @@ import { SELF } from 'cloudflare:test';
 import { describe, it, expect } from 'vitest';
 
 // ── API route validation ──────────────────────────────────────────────────────
-// These tests are deterministic — they return before touching Workers AI
+// These tests are deterministic - they return before touching Workers AI
 // or Durable Objects, so no AI mocking is required.
 
-describe('POST /api/chat — input validation', () => {
+describe('POST /api/chat - input validation', () => {
   it('returns 400 for invalid JSON body', async () => {
     const res = await SELF.fetch('https://example.com/api/chat', {
       method: 'POST',
@@ -49,7 +49,7 @@ describe('POST /api/chat — input validation', () => {
   });
 });
 
-describe('GET /api/history — input validation', () => {
+describe('GET /api/history - input validation', () => {
   it('returns 400 when sessionId query param is absent', async () => {
     const res = await SELF.fetch('https://example.com/api/history');
     expect(res.status).toBe(400);
@@ -58,7 +58,7 @@ describe('GET /api/history — input validation', () => {
   });
 });
 
-describe('POST /api/summary — input validation', () => {
+describe('POST /api/summary - input validation', () => {
   it('returns 400 for invalid JSON body', async () => {
     const res = await SELF.fetch('https://example.com/api/summary', {
       method: 'POST',

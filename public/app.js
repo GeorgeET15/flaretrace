@@ -311,7 +311,7 @@ function renderIncident(incident) {
     list.className = 'incident-section__list';
     for (const t of incident.testsPerformed) {
       const li = document.createElement('li');
-      li.textContent = `${t.type}${t.target ? ' ' + t.target : ''} — ${t.summary}`;
+      li.textContent = `${t.type}${t.target ? ' ' + t.target : ''} - ${t.summary}`;
       list.appendChild(li);
     }
     section.appendChild(list);

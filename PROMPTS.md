@@ -25,7 +25,7 @@ This file records the significant prompts that shaped the implementation.
 >
 > Application: AI-powered network troubleshooting assistant. User describes a networking
 > problem, pastes command output (ping, traceroute, ipconfig, etc.), and the AI reasons
-> about the evidence iteratively — keeping track of symptoms, observations, tests already
+> about the evidence iteratively - keeping track of symptoms, observations, tests already
 > performed, hypotheses, and next recommended steps. Avoids re-asking for information
 > already provided.
 >
@@ -34,14 +34,14 @@ This file records the significant prompts that shaped the implementation.
 > AI troubleshooting agent → Workers AI (Llama 3.3) + persistent state (Durable Objects or Agents SDK)
 >
 > Milestones defined:
-> 1. Basic Worker — scaffold project, verify local dev works
-> 2. Static UI — index.html, style.css, app.js (no AI yet)
-> 3. Basic API — POST /api/chat returning hardcoded response
-> 4. Workers AI — call Llama model, return response
-> 5. System prompt — network troubleshooting persona and reasoning guidance
-> 6. Persistent state — conversation + troubleshooting state across requests
-> 7. Better troubleshooting state — symptoms, observations, tests, hypotheses, next step
-> 8. Incident summary — structured summary on demand
+> 1. Basic Worker - scaffold project, verify local dev works
+> 2. Static UI - index.html, style.css, app.js (no AI yet)
+> 3. Basic API - POST /api/chat returning hardcoded response
+> 4. Workers AI - call Llama model, return response
+> 5. System prompt - network troubleshooting persona and reasoning guidance
+> 6. Persistent state - conversation + troubleshooting state across requests
+> 7. Better troubleshooting state - symptoms, observations, tests, hypotheses, next step
+> 8. Incident summary - structured summary on demand
 >
 > Explicit constraints: no React/Next.js/Tailwind, no external databases, no RAG,
 > no multi-agent architectures, no actual router control or SSH.
@@ -62,7 +62,7 @@ This file records the significant prompts that shaped the implementation.
 
 **Date:** 2026-09-21
 
-**Purpose:** Milestone 1 execution — scaffold the project, fix wrangler.jsonc placeholders, verify dev server.
+**Purpose:** Milestone 1 execution - scaffold the project, fix wrangler.jsonc placeholders, verify dev server.
 
 **Prompt summary:**
 
@@ -79,21 +79,21 @@ This file records the significant prompts that shaped the implementation.
 
 **Date:** 2026-09-21
 
-**Purpose:** Milestone 4 — add Workers AI binding and wire up Llama 3.3.
+**Purpose:** Milestone 4 - add Workers AI binding and wire up Llama 3.3.
 
 **Prompt summary:**
 
 > Add the AI binding to wrangler.jsonc, run `npx wrangler types` to regenerate the Env interface,
 > replace the hard-coded /api/chat response with a real `env.AI.run()` call to
 > `@cf/meta/llama-3.3-70b-instruct-fp8-fast`. Use a minimal system prompt for now.
-> sessionId is received but intentionally ignored — memory comes in Milestone 6.
+> sessionId is received but intentionally ignored - memory comes in Milestone 6.
 
 **Changes influenced by this prompt:**
 
 - Added `"ai": { "binding": "AI" }` to `wrangler.jsonc`
-- Ran `npx wrangler types` — generated `worker-configuration.d.ts` with `AI: Ai` and `ASSETS: Fetcher`
+- Ran `npx wrangler types` - generated `worker-configuration.d.ts` with `AI: Ai` and `ASSETS: Fetcher`
 - Added `MODEL` constant with `as const` so TypeScript resolves the correct `run()` overload
-- Added `SYSTEM_PROMPT` constant (minimal — will be expanded in Milestone 5)
+- Added `SYSTEM_PROMPT` constant (minimal - will be expanded in Milestone 5)
 - Replaced hard-coded response with `env.AI.run(MODEL, { messages, max_tokens, temperature })`
 - Added `extractResponseText()` helper to safely narrow the `string | object | AsyncResponse` union
   that the generated types expose for the output
@@ -104,24 +104,24 @@ This file records the significant prompts that shaped the implementation.
 
 **Date:** 2026-09-21
 
-**Purpose:** Milestone 5 — convert to a real Cloudflare Agent with persistent conversation state.
+**Purpose:** Milestone 5 - convert to a real Cloudflare Agent with persistent conversation state.
 
 **Prompt summary:**
 
 > Install the `agents` SDK. Create a `NetworkAgent` class extending `Agent<Env, AgentState>`.
 > Give each browser session its own Agent instance keyed by sessionId.
 > Persist conversation history across messages using `this.setState()`.
-> Keep POST /api/chat — no WebSockets yet.
+> Keep POST /api/chat - no WebSockets yet.
 > The Worker becomes a thin router: validate input, call `getAgentByName(env.NetworkAgent, sessionId)`,
 > forward the request to the Agent's `onRequest()`.
-> Prove memory works: after message 1, send "What did I tell you I could ping?" — model should remember.
+> Prove memory works: after message 1, send "What did I tell you I could ping?" - model should remember.
 > Also prove session isolation: different sessionIds have independent state.
 
 **Changes influenced by this prompt:**
 
 - Installed `agents` npm package + `@types/node`
-- Created `src/prompts.ts` — shared MODEL constant and SYSTEM_PROMPT
-- Created `src/agent.ts` — `NetworkAgent extends Agent<Env, AgentState>`:
+- Created `src/prompts.ts` - shared MODEL constant and SYSTEM_PROMPT
+- Created `src/agent.ts` - `NetworkAgent extends Agent<Env, AgentState>`:
   - `initialState = { messages: [] }`
   - `onRequest()` loads history from `this.state`, builds full message array
     (system + history + new user message), calls `this.env.AI.run()`, persists
@@ -134,7 +134,7 @@ This file records the significant prompts that shaped the implementation.
   - Added `"compatibility_flags": ["nodejs_compat"]`
   - Added `"durable_objects"` binding for `NetworkAgent`
   - Added `"migrations"` with `"new_sqlite_classes": ["NetworkAgent"]`
-- Ran `npx wrangler types` — `Env` now includes `NetworkAgent: DurableObjectNamespace<NetworkAgent>`
+- Ran `npx wrangler types` - `Env` now includes `NetworkAgent: DurableObjectNamespace<NetworkAgent>`
   (wrangler resolved the generic automatically; no cast required)
 
 ---
@@ -143,7 +143,7 @@ This file records the significant prompts that shaped the implementation.
 
 **Date:** 2026-09-21
 
-**Purpose:** Milestone 6 — structured network incident state alongside conversation history.
+**Purpose:** Milestone 6 - structured network incident state alongside conversation history.
 
 **Prompt summary:**
 
@@ -155,19 +155,19 @@ This file records the significant prompts that shaped the implementation.
 
 **Changes influenced by this prompt:**
 
-- Created `src/types.ts` — `Incident`, `AgentState`, `INITIAL_INCIDENT` (shared types)
-- Updated `src/prompts.ts` — replaced static `SYSTEM_PROMPT` with `buildSystemPrompt(incident)`
+- Created `src/types.ts` - `Incident`, `AgentState`, `INITIAL_INCIDENT` (shared types)
+- Updated `src/prompts.ts` - replaced static `SYSTEM_PROMPT` with `buildSystemPrompt(incident)`
   which injects current state and instructs the model to return JSON
 - Updated `src/agent.ts`:
   - `AgentState` now includes `incident: Incident`
   - `onRequest` builds system prompt with current incident, calls AI, parses structured response
   - `parseAiResponse()` tries three strategies: clean JSON, fenced JSON, extracted JSON block
   - `coerceIncident()` validates and normalises the incident object from the model
-  - Response now returns `{ message, incident }` — Agent's response passes through Worker unchanged
-- Updated `public/index.html` — two-panel layout: `<main>` (chat) + `<aside>` (incident panel)
-- Updated `public/style.css` — `.main-layout` flex row, `.incident-panel` fixed-width sidebar,
+  - Response now returns `{ message, incident }` - Agent's response passes through Worker unchanged
+- Updated `public/index.html` - two-panel layout: `<main>` (chat) + `<aside>` (incident panel)
+- Updated `public/style.css` - `.main-layout` flex row, `.incident-panel` fixed-width sidebar,
   status badges, section labels, next-step highlight box, mobile stack layout
-- Updated `public/app.js` — `renderIncident()` builds incident panel DOM using `textContent`
+- Updated `public/app.js` - `renderIncident()` builds incident panel DOM using `textContent`
   only (no innerHTML for content); called after each successful API response
 
 ---
@@ -184,15 +184,15 @@ This file records the significant prompts that shaped the implementation.
 
 **Changes influenced by this prompt:**
 
-- Replaced `public/style.css` — full dark theme: `#0D1117` base, `#161B22` surfaces, `#F6821F` orange
+- Replaced `public/style.css` - full dark theme: `#0D1117` base, `#161B22` surfaces, `#F6821F` orange
   accent, Inter + Fira Code typefaces, custom scrollbars and text selection themed to palette
-- Replaced `public/index.html` — updated header with SVG network icon, monospaced title, Workers
+- Replaced `public/index.html` - updated header with SVG network icon, monospaced title, Workers
   badge, `$` prompt prefix in input, SVG send arrow; incident panel restructured as header +
   scrollable `#incident-body`
-- Replaced `public/app.js` — `appendMessage()` adds frame headers with timestamp and directional
+- Replaced `public/app.js` - `appendMessage()` adds frame headers with timestamp and directional
   arrows; `showLoading()` uses three-dot animation; `renderIncident()` targets `#incident-body`,
   uses updated class names, `✓` mark for confirmed observations
-- Fixed `src/agent.ts` — `extractResponseText()` now validates `result.response` is a string before
+- Fixed `src/agent.ts` - `extractResponseText()` now validates `result.response` is a string before
   returning it, preventing `raw.replace is not a function` when AI returns an unexpected shape
 
 ---
@@ -201,12 +201,12 @@ This file records the significant prompts that shaped the implementation.
 
 **Date:** 2026-09-21
 
-**Purpose:** Rename the product and AI persona — branding cleanup before deployment.
+**Purpose:** Rename the product and AI persona - branding cleanup before deployment.
 
 **Prompt summary:**
 
 > Rename the project/product from "Network Agent" to **FlareTrace**, and the AI troubleshooting
-> agent persona from the generic "assistant" to **Clara**. No new functionality — this is a
+> agent persona from the generic "assistant" to **Clara**. No new functionality - this is a
 > naming pass only.
 >
 > Internal changes:
@@ -234,7 +234,7 @@ This file records the significant prompts that shaped the implementation.
 - `public/app.js`: AI display label in `appendMessage()` → `'clara'`, welcome message meta → `'clara · ready'`,
   loading indicator meta → `'clara'`, welcome body text → Clara introduction
 - `package.json`: `"name"` → `"flaretrace"`
-- Ran `npx wrangler types` — `Env` now includes `FLARETRACE_AGENT: DurableObjectNamespace<FlareTraceAgent>`
+- Ran `npx wrangler types` - `Env` now includes `FLARETRACE_AGENT: DurableObjectNamespace<FlareTraceAgent>`
 - `npx tsc --noEmit` passes cleanly
 
 ---
@@ -243,7 +243,7 @@ This file records the significant prompts that shaped the implementation.
 
 **Date:** 2026-09-21
 
-**Purpose:** Final milestone — polish, testing, documentation, deployment, and GitHub submission.
+**Purpose:** Final milestone - polish, testing, documentation, deployment, and GitHub submission.
 
 **Prompt summary:**
 
@@ -253,7 +253,7 @@ This file records the significant prompts that shaped the implementation.
 >
 > 1. Verify all naming is correct (FlareTrace / Clara / FlareTraceAgent / flaretrace).
 >    Do NOT modify historical prompts in PROMPTS.md.
-> 2. Confirm that chat history restores on page refresh (GET /api/history already implemented —
+> 2. Confirm that chat history restores on page refresh (GET /api/history already implemented -
 >    verify the browser correctly calls it on load and re-renders messages and inspector state).
 > 3. Confirm that New Incident creates a fresh UUID, switches to a new agent instance, and
 >    leaves the old one intact.
@@ -262,7 +262,7 @@ This file records the significant prompts that shaped the implementation.
 >    invalid model output, Agent lookup failure, network failure, history request failure.
 > 6. Confirm loading behavior and duplicate-submission prevention.
 > 7. Verify frontend rendering uses textContent (not innerHTML) for untrusted content.
-> 8. Do a responsive layout pass — two-panel desktop, stacked mobile.
+> 8. Do a responsive layout pass - two-panel desktop, stacked mobile.
 > 9. Run manual agent behavior tests:
 >    A. Basic gateway/internet troubleshooting
 >    B. DNS reasoning

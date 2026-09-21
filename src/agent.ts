@@ -269,7 +269,7 @@ export function ensureIncidentShape(raw: unknown): Incident {
     dns:        ensureDnsShape(conn.dns),
   };
 
-  // Old sessions may have string[] for testsPerformed — discard those.
+  // Old sessions may have string[] for testsPerformed - discard those.
   const testsPerformed: TestResult[] = Array.isArray(r.testsPerformed)
     ? r.testsPerformed.flatMap(t => {
         if (typeof t === 'string') return [];
@@ -309,7 +309,7 @@ function ensureDnsShape(raw: unknown): { status: DnsStatus } {
 }
 
 // ── Incident summary formatter ────────────────────────────────────────────────
-// Generates a plain-text summary from structured state — no AI call needed.
+// Generates a plain-text summary from structured state - no AI call needed.
 
 function formatSummary(incident: Incident): string {
   const { connectivity, testsPerformed, observations, hypotheses, nextStep } = incident;
@@ -319,12 +319,12 @@ function formatSummary(incident: Incident): string {
   const gw = connectivity.gateway.address
     ? `Gateway (${connectivity.gateway.address})`
     : 'Gateway';
-  lines.push(`${reachSym(connectivity.gateway.status)} ${gw} — ${connectivity.gateway.status}`);
+  lines.push(`${reachSym(connectivity.gateway.status)} ${gw} - ${connectivity.gateway.status}`);
   const ip = connectivity.internetIp.address
     ? `Internet (${connectivity.internetIp.address})`
     : 'Internet';
-  lines.push(`${reachSym(connectivity.internetIp.status)} ${ip} — ${connectivity.internetIp.status}`);
-  lines.push(`${dnsSym(connectivity.dns.status)} DNS — ${connectivity.dns.status}`);
+  lines.push(`${reachSym(connectivity.internetIp.status)} ${ip} - ${connectivity.internetIp.status}`);
+  lines.push(`${dnsSym(connectivity.dns.status)} DNS - ${connectivity.dns.status}`);
 
   if (testsPerformed.length > 0) {
     lines.push('');

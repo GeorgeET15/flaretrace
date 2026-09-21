@@ -4,7 +4,7 @@ FlareTrace is a stateful AI-assisted network troubleshooting application built o
 
 Its troubleshooting agent, Clara, uses Llama 3.3 through Workers AI to guide users through network diagnosis while maintaining structured incident state across a conversation.
 
-Unlike a stateless chatbot, Clara tracks current connectivity facts, diagnostic evidence, tests performed, hypotheses, and recommended next steps — reconciling new evidence as troubleshooting progresses.
+Unlike a stateless chatbot, Clara tracks current connectivity facts, diagnostic evidence, tests performed, hypotheses, and recommended next steps - reconciling new evidence as troubleshooting progresses.
 
 ---
 
@@ -42,7 +42,7 @@ flowchart LR
     S -. nextStep .-> S
 ```
 
-Each browser session generates a UUID. That UUID maps — via `getAgentByName` from the Cloudflare Agents SDK — to one `FlareTraceAgent` Durable Object instance with its own isolated SQLite database. Different sessions produce different instances with no shared state.
+Each browser session generates a UUID. That UUID maps - via `getAgentByName` from the Cloudflare Agents SDK - to one `FlareTraceAgent` Durable Object instance with its own isolated SQLite database. Different sessions produce different instances with no shared state.
 
 ---
 
@@ -67,7 +67,7 @@ User provides more evidence
 Clara is instructed to update only the connectivity fields for which explicit evidence exists in the current message. The backend merge layer then:
 
 - Replaces the matching connectivity field (gateway / internetIp / dns) with the new status
-- Deduplicates tests by type + target — a repeated test replaces the old result
+- Deduplicates tests by type + target - a repeated test replaces the old result
 - Appends new observations (case-insensitive dedup)
 - Replaces the hypothesis list entirely each turn (no accumulation of stale hypotheses)
 
@@ -77,10 +77,10 @@ Clara is instructed to update only the connectivity fields for which explicit ev
 
 ```
 messages
-→ full conversation history — multi-turn context for the model
+→ full conversation history - multi-turn context for the model
 
 observations
-→ notable facts as they were reported — append-only, case-deduped
+→ notable facts as they were reported - append-only, case-deduped
 
 connectivity
 → current known truth for each node
@@ -94,7 +94,7 @@ testsPerformed
   a repeated test (same type + target) replaces the previous entry
 
 hypotheses
-→ current plausible explanations only — replaced in full each turn
+→ current plausible explanations only - replaced in full each turn
   contradicted hypotheses do not survive
 
 nextStep
@@ -111,7 +111,7 @@ This is one of the most important parts of the project. The Inspector panel in t
 |---|---|
 | Frontend | Vanilla HTML / CSS / JavaScript |
 | Backend | Cloudflare Workers (TypeScript) |
-| AI | Cloudflare Workers AI — Llama 3.3 70B |
+| AI | Cloudflare Workers AI - Llama 3.3 70B |
 | Agent coordination | Cloudflare Agents SDK |
 | Persistent state | Durable Objects (SQLite) |
 | Testing | Vitest + `@cloudflare/vitest-plugin` |
@@ -154,7 +154,7 @@ My laptop can ping 192.168.1.1 but cannot ping 8.8.8.8.
 
 **Clara:**
 ```
-Your local path to the gateway is working — the problem is beyond the router.
+Your local path to the gateway is working - the problem is beyond the router.
 Run: traceroute 8.8.8.8
 ```
 
@@ -163,9 +163,9 @@ Run: traceroute 8.8.8.8
 ● INVESTIGATING
 
 Connectivity
-✓ Gateway (192.168.1.1) — reachable
-✗ Internet (8.8.8.8)   — unreachable
-? DNS                  — unknown
+✓ Gateway (192.168.1.1) - reachable
+✗ Internet (8.8.8.8)   - unreachable
+? DNS                  - unknown
 
 Possible Causes
 · Upstream connectivity issue

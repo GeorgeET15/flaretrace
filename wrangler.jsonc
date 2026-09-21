@@ -14,7 +14,7 @@
 		"directory": "./public",
 		"binding": "ASSETS"
 	},
-	// Workers AI binding — gives the Worker access to Cloudflare's AI models.
+	// Workers AI binding - gives the Worker access to Cloudflare's AI models.
 	// Accessible as env.AI inside both the Worker and the Agent.
 	"ai": {
 		"binding": "AI"

@@ -528,7 +528,7 @@ body {
   flex-shrink: 0;
 }
 
-/* Wrapper gives the beam a surface to anchor to — needed because ::before
+/* Wrapper gives the beam a surface to anchor to - needed because ::before
    cannot be placed directly on a <textarea> element. */
 .input-area__field {
   flex: 1;
@@ -631,7 +631,7 @@ body {
 .input-area__send:hover:not(:disabled) { opacity: 0.86; }
 .input-area__send:disabled             { opacity: 0.4; cursor: not-allowed; }
 
-/* ── Incident panel (right) — packet inspector ─────────────────────────── */
+/* ── Incident panel (right) - packet inspector ─────────────────────────── */
 
 .incident-panel {
   width: 284px;

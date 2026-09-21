@@ -31,7 +31,7 @@ async function handleApi(request: Request, env: Env, url: URL): Promise<Response
 }
 
 async function handleChat(request: Request, env: Env): Promise<Response> {
-  // Clone the body before reading it — we need to inspect sessionId here
+  // Clone the body before reading it - we need to inspect sessionId here
   // before forwarding just the message to the Agent.
   let body: { message?: string; sessionId?: string };
   try {
