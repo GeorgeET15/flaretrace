@@ -210,8 +210,21 @@ body {
   border-right-width: 0;
 }
 
+.sessions-panel__brand {
+  padding: 18px 16px 6px;
+  flex-shrink: 0;
+}
+
+.sessions-panel__brand-name {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text);
+  letter-spacing: -0.01em;
+}
+
 .sessions-panel__top {
-  padding: 10px 8px 4px;
+  padding: 4px 8px;
   flex-shrink: 0;
 }
 
@@ -676,20 +689,14 @@ body {
   flex-direction: column;
 }
 
-.incident-panel__footer {
-  padding: 8px 16px;
-  border-top: 1px solid var(--color-border);
-  flex-shrink: 0;
-}
-
 .incident-summary-btn {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 4px 8px;
+  margin-top: 16px;
+  padding: 5px 0;
   background: transparent;
   border: none;
-  border-radius: 3px;
   color: var(--color-text-muted);
   font-family: var(--font-mono);
   font-size: 10px;

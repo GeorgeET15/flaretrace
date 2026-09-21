@@ -13,7 +13,6 @@ const inputEl        = document.getElementById('message-input');
 const sendBtn        = document.getElementById('send-btn');
 const errorEl        = document.getElementById('error-banner');
 const incidentBodyEl = document.getElementById('incident-body');
-const summaryBtn     = document.getElementById('summary-btn');
 const newIncidentBtn = document.getElementById('new-incident-btn');
 
 let currentIncident = null;
@@ -353,7 +352,25 @@ function renderIncident(incident) {
     incidentBodyEl.appendChild(ns);
   }
 
-  if (summaryBtn) summaryBtn.hidden = !incidentHasData(incident);
+  if (incidentHasData(incident)) {
+    const btn = document.createElement('button');
+    btn.className = 'incident-summary-btn';
+    btn.setAttribute('aria-label', 'Generate incident summary');
+    const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    icon.setAttribute('width', '11'); icon.setAttribute('height', '11');
+    icon.setAttribute('viewBox', '0 0 12 12'); icon.setAttribute('fill', 'none');
+    icon.setAttribute('aria-hidden', 'true');
+    const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    p.setAttribute('d', 'M1 2.5h10M1 5.5h7M1 8.5h9');
+    p.setAttribute('stroke', 'currentColor'); p.setAttribute('stroke-width', '1.3');
+    p.setAttribute('stroke-linecap', 'round');
+    icon.appendChild(p);
+    const lbl = document.createElement('span');
+    lbl.textContent = 'Generate Summary';
+    btn.appendChild(icon); btn.appendChild(lbl);
+    btn.addEventListener('click', () => generateSummary(btn, lbl));
+    incidentBodyEl.appendChild(btn);
+  }
 }
 
 function addConnRow(list, label, address, status, kind) {
@@ -409,7 +426,6 @@ function resetIncidentPanel() {
   empty.className = 'incident-empty';
   empty.textContent = '// no incident · send a message to begin';
   incidentBodyEl.appendChild(empty);
-  if (summaryBtn) summaryBtn.hidden = true;
 }
 
 // ── Session controls ──────────────────────────────────────────────────────────
@@ -425,10 +441,10 @@ function newIncident() {
   inputEl.focus();
 }
 
-async function generateSummary() {
+async function generateSummary(btn, lbl) {
   if (!incidentHasData(currentIncident)) return;
-  summaryBtn.disabled = true;
-  document.getElementById('summary-btn-label').textContent = '…';
+  btn.disabled = true;
+  lbl.textContent = '…';
   try {
     const res = await fetch('/api/summary', {
       method: 'POST',
@@ -441,8 +457,8 @@ async function generateSummary() {
   } catch (err) {
     showError(err.message || 'Could not generate summary.');
   } finally {
-    summaryBtn.disabled = false;
-    document.getElementById('summary-btn-label').textContent = 'Generate Summary';
+    btn.disabled = false;
+    lbl.textContent = 'Generate Summary';
   }
 }
 
@@ -526,7 +542,6 @@ inputEl.addEventListener('keydown', (e) => {
 });
 
 newIncidentBtn?.addEventListener('click', () => newIncident());
-summaryBtn?.addEventListener('click',     () => generateSummary());
 
 // ── Initialise ────────────────────────────────────────────────────────────────
 
