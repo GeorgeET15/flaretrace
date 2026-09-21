@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FlareTrace — AI Network Troubleshooting</title>
+  <title>FlareTrace - AI Network Troubleshooting</title>
   <meta name="description" content="Stateful AI-assisted network troubleshooting built on Cloudflare Workers, Agents SDK, and Durable Objects.">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="/landing.css">
+  <script>(function(){var t=localStorage.getItem('ft_theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
 </head>
 <body>
 
@@ -31,7 +32,20 @@
       <span class="l-nav__brand-sub">AI network troubleshooting</span>
     </a>
     <div class="l-nav__links">
-      <a href="https://github.com/GeorgeET15/flaretrace" target="_blank" rel="noopener" class="l-nav__link">GitHub</a>
+      <a href="https://github.com/GeorgeET15/flaretrace" target="_blank" rel="noopener" class="l-nav__link">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" style="vertical-align:-2px;margin-right:5px">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+        </svg>GitHub
+      </a>
+      <button id="theme-toggle" class="l-theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+        <svg class="icon-sun" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+          <circle cx="7.5" cy="7.5" r="2.5" stroke="currentColor" stroke-width="1.2"/>
+          <path d="M7.5 1.5v2M7.5 11.5v2M1.5 7.5h2M11.5 7.5h2M3.4 3.4l1.4 1.4M10.2 10.2l1.4 1.4M10.2 4.8l1.4-1.4M3.4 11.6l1.4-1.4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+        <svg class="icon-moon" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+          <path d="M7.5 1.9a3.8 3.8 0 0 0 5.6 5.6 5.6 5.6 0 1 1-5.6-5.6z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+        </svg>
+      </button>
       <a href="/app/" class="l-nav__cta">Launch Clara &#x2192;</a>
     </div>
   </nav>
@@ -68,7 +82,7 @@
             <div class="demo-dot"></div>
             <div class="demo-dot"></div>
           </div>
-          <span class="demo-title-text">FlareTrace &#x2014; Clara</span>
+          <span class="demo-title-text">FlareTrace / Clara</span>
         </div>
         <div class="demo-body">
           <div class="demo-chat">
@@ -87,7 +101,7 @@
                 <span>clara &#xB7; 14:23:02</span>
               </div>
               <div class="demo-msg__body">
-                Local path to gateway is working &#x2014; the problem is beyond the router. Run:
+                Local path to gateway is working. The problem is beyond the router. Run:
                 <div class="demo-msg__code">$ traceroute 8.8.8.8</div>
               </div>
             </div>
@@ -173,7 +187,7 @@
           <div class="l-step__title">State survives sessions</div>
           <p class="l-step__body">
             Each browser session maps to a dedicated Durable Object with its own SQLite database.
-            Close and reopen &#x2014; your incident is waiting exactly where you left it.
+            Close and reopen the browser and your incident is waiting exactly where you left it.
           </p>
           <div class="l-step__detail">getAgentByName(sessionUUID)</div>
         </li>
@@ -186,15 +200,15 @@
         <div class="l-state__text">
           <h2 id="state-heading">The incident model</h2>
           <p>
-            Clara doesn&#x2019;t just generate text &#x2014; it maintains <strong>structured incident state</strong>.
-            The Inspector panel exposes exactly what Clara knows at any moment.
+            Clara doesn&#x2019;t just generate text. It maintains <strong>structured incident state</strong>
+            that the Inspector panel exposes in real time.
           </p>
           <p>
             Connectivity fields are updated only when explicit evidence exists in the current message.
             Fields with no new evidence are <strong>preserved from prior turns</strong>.
           </p>
           <p>
-            The hypothesis list is <strong>replaced in full</strong> each turn &#x2014; no stale hypotheses
+            The hypothesis list is <strong>replaced in full</strong> each turn. No stale hypotheses
             survive new evidence.
           </p>
         </div>
@@ -207,11 +221,11 @@
   <span class="sm-type">dns</span>        <span class="sm-val">{ status }</span>
 <span class="sm-sep"></span>
 <span class="sm-key">testsPerformed</span>
-<span class="sm-note">  latest result per type&#x2B;target</span>
+<span class="sm-note">  latest result per type+target</span>
   <span class="sm-val">{ type, target?, result, summary }</span>
 <span class="sm-sep"></span>
 <span class="sm-key">hypotheses</span>
-<span class="sm-note">  current plausible causes &#x2014; replaced each turn</span>
+<span class="sm-note">  current plausible causes, replaced each turn</span>
 <span class="sm-sep"></span>
 <span class="sm-key">nextStep</span>
 <span class="sm-note">  single most useful next action</span></code></pre>
@@ -243,8 +257,8 @@
         </div>
       </div>
       <p class="arch-note">
-        Each browser session generates a UUID. That UUID maps &#x2014; via <code>getAgentByName</code> from the
-        Cloudflare Agents SDK &#x2014; to one <code>FlareTraceAgent</code> Durable Object instance with its own
+        Each browser session generates a UUID mapped via <code>getAgentByName</code> from the
+        Cloudflare Agents SDK to one <code>FlareTraceAgent</code> Durable Object instance with its own
         isolated SQLite database. Different sessions produce different instances with no shared state.
       </p>
     </section>
@@ -268,7 +282,6 @@
         </svg>
         FlareTrace
       </a>
-      <span class="l-footer__meta">Cloudflare Workers AI Assignment &#xB7; 31 tests passing</span>
       <div class="l-footer__links">
         <a href="https://github.com/GeorgeET15/flaretrace" target="_blank" rel="noopener" class="l-footer__link">GitHub &#x2197;</a>
         <a href="/app/" class="l-footer__link">Launch Clara &#x2192;</a>
@@ -276,5 +289,12 @@
     </div>
   </footer>
 
+  <script>
+    document.getElementById('theme-toggle').addEventListener('click', function() {
+      var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('ft_theme', next);
+    });
+  </script>
 </body>
 </html>
