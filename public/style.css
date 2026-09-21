@@ -153,13 +153,6 @@ body {
   border-radius: 3px;
 }
 
-.app-header__dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--color-ok);
-  flex-shrink: 0;
-}
 
 /* ── Icon buttons (header) ─────────────────────────────────────────────── */
 
@@ -687,39 +680,35 @@ body {
 }
 
 .incident-panel__footer {
-  padding: 10px 12px;
+  padding: 8px 16px;
   border-top: 1px solid var(--color-border);
   flex-shrink: 0;
 }
 
 .incident-summary-btn {
-  width: 100%;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 7px;
-  padding: 8px 12px;
-  background: rgba(246, 130, 31, 0.07);
-  border: 1px solid rgba(246, 130, 31, 0.35);
-  border-radius: var(--radius);
-  color: var(--color-accent);
+  gap: 5px;
+  padding: 4px 8px;
+  background: transparent;
+  border: none;
+  border-radius: 3px;
+  color: var(--color-text-muted);
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 500;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
+  transition: color 0.15s;
 }
 
 .incident-summary-btn:hover:not(:disabled) {
-  background: var(--color-accent-dim);
-  border-color: var(--color-accent);
-  animation: none;
+  color: var(--color-accent);
 }
 
 .incident-summary-btn:disabled {
-  opacity: 0.4;
+  opacity: 0.35;
   cursor: not-allowed;
 }
 
