@@ -1,0 +1,42 @@
+{
+	"name": "flaretrace",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-01-01",
+	// nodejs_compat is required by the Agents SDK
+	"compatibility_flags": ["nodejs_compat"],
+	"observability": {
+		"enabled": true,
+	},
+	// Workers Assets: serve files from ./public as static content.
+	// The Worker still runs first; anything it doesn't handle falls through
+	// to these files via env.ASSETS.fetch(request).
+	"assets": {
+		"directory": "./public",
+		"binding": "ASSETS"
+	},
+	// Workers AI binding — gives the Worker access to Cloudflare's AI models.
+	// Accessible as env.AI inside both the Worker and the Agent.
+	"ai": {
+		"binding": "AI"
+	},
+	// Durable Object binding for the FlareTraceAgent.
+	// Each unique sessionId maps to one instance of this class,
+	// each with its own isolated SQLite-backed storage.
+	"durable_objects": {
+		"bindings": [
+			{
+				"name": "FLARETRACE_AGENT",
+				"class_name": "FlareTraceAgent"
+			}
+		]
+	},
+	// Tells Cloudflare to create the Durable Object's SQLite database
+	// on first deployment. "new_sqlite_classes" provisions the DB;
+	// without this, state persistence will not work.
+	"migrations": [
+		{
+			"tag": "v1",
+			"new_sqlite_classes": ["FlareTraceAgent"]
+		}
+	]
+}
