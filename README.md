@@ -12,6 +12,11 @@ Unlike a stateless chatbot, Clara tracks current connectivity facts, diagnostic 
 
 **Live:** https://flaretrace.georgeet15.workers.dev
 
+| Route | Content |
+|---|---|
+| `/` | FlareTrace landing page |
+| `/app/` | Clara troubleshooting application |
+
 ---
 
 ## Assignment Requirements

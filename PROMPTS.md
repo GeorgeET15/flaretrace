@@ -310,3 +310,43 @@ This file records the significant prompts that shaped the implementation.
 - `PRODUCT.md`: removed (internal impeccable design tool artifact, not needed for submission)
 
 ---
+## Prompt 9
+
+**Date:** 2026-09-21
+
+**Purpose:** Add a public landing page at `/` explaining the project to a hiring reviewer, while moving the existing Clara application to `/app/`.
+
+**Prompt summary:**
+
+> We are adding a small public landing page to FlareTrace before final submission.
+>
+> Routes after this milestone:
+> - `/` — new FlareTrace landing page
+> - `/app/` — existing Clara troubleshooting application (unchanged)
+>
+> Landing page requirements:
+> 1. Reuse the existing dark/orange visual identity (`#0D1117`, `#161B22`, `#F6821F`, Inter + Fira Code)
+> 2. Sticky nav with logo, GitHub link, and "LAUNCH CLARA →" CTA
+> 3. Hero: bold headline "NETWORK TROUBLESHOOTING THAT REMEMBERS.", description, CTAs, and
+>    a live demo window showing a simulated Clara session with chat and Inspector panel
+> 4. Tech strip: Cloudflare Workers, Agents SDK, Durable Objects, Workers AI, Llama 3.3 70B
+> 5. How Clara Works: 3-step section (report problem, evidence reconciles, state persists)
+> 6. The incident model: 2-column section with explanatory copy and structured state code block
+> 7. Architecture: horizontal flow diagram (Browser → Worker → DO → Workers AI)
+> 8. Footer with brand, metadata, GitHub link, Launch CTA
+> 9. "Launch Clara →" links to `/app/`
+> 10. Responsive — single column on mobile
+>
+> Constraints: do not modify Clara's AI logic, Agent state, DO architecture, or any API.
+
+**Changes influenced by this prompt:**
+
+- `public/app/index.html`: new file — the existing Clara app moved from `public/index.html`,
+  title changed to `<title>FlareTrace — Clara</title>`, asset paths made absolute (`/favicon.svg`,
+  `/style.css`, `/app.js`)
+- `public/index.html`: replaced with new landing page — hero, tech strip, How it Works,
+  state model, architecture diagram, footer; links to `/app/` and GitHub
+- `public/landing.css`: new stylesheet for the landing page, reusing the app's design tokens
+  without modifying `style.css`
+
+---

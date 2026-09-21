@@ -1,25 +1,21 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FlareTrace</title>
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="stylesheet" href="style.css">
+  <title>FlareTrace — AI Network Troubleshooting</title>
+  <meta name="description" content="Stateful AI-assisted network troubleshooting built on Cloudflare Workers, Agents SDK, and Durable Objects.">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="/landing.css">
 </head>
 <body>
-  <div class="app">
 
-    <header class="app-header">
-
-      <button id="toggle-sessions-btn" class="app-header__icon-btn" aria-label="Toggle sessions panel" title="Sessions">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-          <rect x="1" y="1" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.2"/>
-          <line x1="5.5" y1="1" x2="5.5" y2="15" stroke="currentColor" stroke-width="1.2"/>
-        </svg>
-      </button>
-
-      <svg class="app-header__icon" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+  <!-- Navigation -->
+  <nav class="l-nav" aria-label="Site navigation">
+    <a href="/" class="l-nav__brand" aria-label="FlareTrace home">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
         <circle cx="9" cy="9" r="2.5" fill="currentColor"/>
         <circle cx="2.5" cy="2.5" r="1.5" fill="currentColor" opacity="0.65"/>
         <circle cx="15.5" cy="2.5" r="1.5" fill="currentColor" opacity="0.65"/>
@@ -30,105 +26,255 @@
         <line x1="4" y1="14" x2="7" y2="11" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
         <line x1="14" y1="14" x2="11" y2="11" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
       </svg>
-
-      <h1>FlareTrace</h1>
-      <span class="app-header__sep" aria-hidden="true">/</span>
-      <span class="app-header__sub">AI-assisted network troubleshooting</span>
-
-      <div class="app-header__meta">
-        <span class="app-header__badge">Cloudflare Workers</span>
-
-        <button id="theme-toggle-btn" class="app-header__icon-btn" aria-label="Toggle theme" title="Toggle theme">
-          <svg class="icon-sun" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
-            <circle cx="7.5" cy="7.5" r="2.5" stroke="currentColor" stroke-width="1.2"/>
-            <path d="M7.5 1.5v2M7.5 11.5v2M1.5 7.5h2M11.5 7.5h2M3.4 3.4l1.4 1.4M10.2 10.2l1.4 1.4M10.2 4.8l1.4-1.4M3.4 11.6l1.4-1.4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-          </svg>
-          <svg class="icon-moon" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
-            <path d="M7.5 1.9a3.8 3.8 0 0 0 5.6 5.6 5.6 5.6 0 1 1-5.6-5.6z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
-          </svg>
-        </button>
-
-        <button id="toggle-inspector-btn" class="app-header__icon-btn" aria-label="Toggle inspector panel" title="Inspector">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <rect x="1" y="1" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.2"/>
-            <line x1="10.5" y1="1" x2="10.5" y2="15" stroke="currentColor" stroke-width="1.2"/>
-          </svg>
-        </button>
-
-      </div>
-    </header>
-
-    <div class="main-layout">
-
-      <!-- Left: session history -->
-      <aside class="sessions-panel" id="sessions-panel" aria-label="Sessions">
-        <div class="sessions-panel__top">
-          <button id="new-incident-btn" class="sessions-new-btn" aria-label="New incident">
-            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
-              <path d="M11.5 1.5a1.414 1.414 0 0 1 2 2L5 12H3v-2L11.5 1.5z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
-            </svg>
-            New Incident
-          </button>
-        </div>
-        <div class="sessions-panel__body">
-          <ul id="sessions-list" class="sessions-list" aria-label="Session history"></ul>
-        </div>
-      </aside>
-
-      <!-- Center: chat conversation -->
-      <main class="chat-panel">
-        <div id="messages" class="messages" role="log" aria-live="polite" aria-label="Conversation">
-          <div id="welcome-message" class="message message--assistant">
-            <div class="message__frame">
-              <span class="message__frame-arrow" aria-hidden="true">←</span>
-              <span>clara · ready</span>
-            </div>
-            <div class="message__body">Hi, I'm Clara. Describe the network problem you're seeing and I'll work through it with you step by step. You can paste output from commands like <code>ping</code>, <code>traceroute</code>, <code>ipconfig</code>, or <code>nslookup</code> at any point.</div>
-          </div>
-        </div>
-
-        <div id="error-banner" class="error-banner" hidden aria-live="assertive"></div>
-
-        <form id="chat-form" class="input-area">
-          <span class="input-area__prompt" aria-hidden="true">$</span>
-          <div class="input-area__field">
-            <textarea
-              id="message-input"
-              class="input-area__textarea"
-              placeholder="# describe the problem or paste command output…"
-              rows="1"
-              aria-label="Message input"
-            ></textarea>
-          </div>
-          <button type="submit" id="send-btn" class="input-area__send">
-            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
-              <path d="M1.5 6.5H11.5M11.5 6.5L7.5 2.5M11.5 6.5L7.5 10.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            Send
-          </button>
-        </form>
-      </main>
-
-      <!-- Right: live incident inspector -->
-      <aside id="incident-panel" class="incident-panel" aria-label="Incident state">
-        <div class="incident-panel__header">
-          <svg class="incident-panel__header-icon" viewBox="0 0 13 13" fill="none" aria-hidden="true">
-            <rect x="1" y="1" width="11" height="11" rx="1.5" stroke="currentColor" stroke-width="1.2"/>
-            <line x1="4" y1="4.5" x2="9" y2="4.5" stroke="currentColor" stroke-width="1"/>
-            <line x1="4" y1="6.5" x2="7" y2="6.5" stroke="currentColor" stroke-width="1"/>
-            <line x1="4" y1="8.5" x2="8" y2="8.5" stroke="currentColor" stroke-width="1"/>
-          </svg>
-          <span class="incident-panel__title">Inspector</span>
-        </div>
-        <div id="incident-body" class="incident-panel__body">
-          <div class="incident-empty">
-            // no incident · send a message to begin
-          </div>
-        </div>
-      </aside>
-
+      FlareTrace
+      <span class="l-nav__brand-sep">/</span>
+      <span class="l-nav__brand-sub">AI network troubleshooting</span>
+    </a>
+    <div class="l-nav__links">
+      <a href="https://github.com/GeorgeET15/flaretrace" target="_blank" rel="noopener" class="l-nav__link">GitHub</a>
+      <a href="/app/" class="l-nav__cta">Launch Clara &#x2192;</a>
     </div>
-  </div>
-  <script src="app.js"></script>
+  </nav>
+
+  <main>
+
+    <!-- Hero -->
+    <section class="l-hero" aria-labelledby="hero-headline">
+      <div class="l-hero__content">
+        <h1 class="l-hero__headline" id="hero-headline">
+          NETWORK<br>TROUBLESHOOTING<br><em>THAT REMEMBERS.</em>
+        </h1>
+        <p class="l-hero__body">
+          Clara is a stateful AI agent that builds an incident model as you troubleshoot.
+          Unlike a stateless chatbot, Clara tracks connectivity facts, reconciles contradictions,
+          and updates its hypotheses with every message.
+        </p>
+        <div class="l-hero__actions">
+          <a href="/app/" class="btn-primary">LAUNCH CLARA &#x2192;</a>
+          <a href="https://github.com/GeorgeET15/flaretrace" target="_blank" rel="noopener" class="btn-ghost">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+            </svg>
+            View on GitHub
+          </a>
+        </div>
+      </div>
+
+      <!-- Live demo simulation -->
+      <div class="demo-window" role="img" aria-label="Clara session example showing chat and inspector state">
+        <div class="demo-titlebar">
+          <div class="demo-dots" aria-hidden="true">
+            <div class="demo-dot"></div>
+            <div class="demo-dot"></div>
+            <div class="demo-dot"></div>
+          </div>
+          <span class="demo-title-text">FlareTrace &#x2014; Clara</span>
+        </div>
+        <div class="demo-body">
+          <div class="demo-chat">
+            <div class="demo-msg">
+              <div class="demo-msg__frame">
+                <span class="dm-arrow dm-arrow--user" aria-hidden="true">&#x2192;</span>
+                <span>you &#xB7; 14:23:00</span>
+              </div>
+              <div class="demo-msg__body">
+                My laptop can ping 192.168.1.1 but cannot ping 8.8.8.8 or google.com.
+              </div>
+            </div>
+            <div class="demo-msg">
+              <div class="demo-msg__frame">
+                <span class="dm-arrow" aria-hidden="true">&#x2190;</span>
+                <span>clara &#xB7; 14:23:02</span>
+              </div>
+              <div class="demo-msg__body">
+                Local path to gateway is working &#x2014; the problem is beyond the router. Run:
+                <div class="demo-msg__code">$ traceroute 8.8.8.8</div>
+              </div>
+            </div>
+          </div>
+          <div class="demo-inspector" aria-label="Inspector panel">
+            <div class="demo-insp__title">
+              <svg width="10" height="10" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                <rect x="1" y="1" width="11" height="11" rx="1.5" stroke="currentColor" stroke-width="1.2"/>
+                <line x1="4" y1="4.5" x2="9" y2="4.5" stroke="currentColor" stroke-width="1"/>
+                <line x1="4" y1="6.5" x2="7" y2="6.5" stroke="currentColor" stroke-width="1"/>
+                <line x1="4" y1="8.5" x2="8" y2="8.5" stroke="currentColor" stroke-width="1"/>
+              </svg>
+              Inspector
+            </div>
+            <div class="demo-status">INVESTIGATING</div>
+            <div class="demo-section">
+              <div class="demo-section__lbl">Connectivity</div>
+              <div class="demo-conn-row">
+                <span class="sym-ok" aria-hidden="true">&#x2713;</span>
+                <span class="conn-lbl">Gateway</span>
+                <span class="conn-val conn-val--ok">reachable</span>
+              </div>
+              <div class="demo-conn-row">
+                <span class="sym-bad" aria-hidden="true">&#x2717;</span>
+                <span class="conn-lbl">Internet</span>
+                <span class="conn-val conn-val--bad">unreachable</span>
+              </div>
+              <div class="demo-conn-row">
+                <span class="sym-unk" aria-hidden="true">?</span>
+                <span class="conn-lbl">DNS</span>
+                <span class="conn-val conn-val--unk">unknown</span>
+              </div>
+            </div>
+            <div class="demo-section">
+              <div class="demo-section__lbl">Possible Causes</div>
+              <ul class="demo-list">
+                <li>Upstream connectivity issue</li>
+                <li>WAN / default-route not configured</li>
+              </ul>
+            </div>
+            <div class="demo-section">
+              <div class="demo-section__lbl">Next Step</div>
+              <div class="demo-nextstep">&#x2192; traceroute 8.8.8.8</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tech strip -->
+    <div class="l-strip" aria-label="Technology stack">
+      <div class="l-strip__inner">
+        <div class="l-strip__item"><span class="l-strip__dot" aria-hidden="true"></span>Cloudflare Workers</div>
+        <div class="l-strip__item"><span class="l-strip__dot" aria-hidden="true"></span>Agents SDK</div>
+        <div class="l-strip__item"><span class="l-strip__dot" aria-hidden="true"></span>Durable Objects</div>
+        <div class="l-strip__item"><span class="l-strip__dot" aria-hidden="true"></span>Workers AI</div>
+        <div class="l-strip__item"><span class="l-strip__dot" aria-hidden="true"></span>Llama 3.3 70B</div>
+        <div class="l-strip__item"><span class="l-strip__dot" aria-hidden="true"></span>TypeScript</div>
+      </div>
+    </div>
+
+    <!-- How Clara Works -->
+    <section class="l-how" aria-labelledby="how-heading">
+      <h2 class="l-section-h" id="how-heading">How Clara Works</h2>
+      <ol class="l-how__steps" aria-label="Three-step process">
+        <li class="l-step">
+          <div class="l-step__title">Report the problem</div>
+          <p class="l-step__body">
+            Describe symptoms or paste output from <code>ping</code>, <code>traceroute</code>,
+            <code>nslookup</code>, or <code>ipconfig</code>. Clara starts building an incident model immediately.
+          </p>
+          <div class="l-step__detail">$ describe the problem or paste command output&#x2026;</div>
+        </li>
+        <li class="l-step">
+          <div class="l-step__title">Evidence reconciles</div>
+          <p class="l-step__body">
+            Each message updates the incident state. Contradictions are resolved, tests are deduped by type
+            and target, and the hypothesis list is replaced in full each turn.
+          </p>
+          <div class="l-step__detail">connectivity &#x2192; testsPerformed &#x2192; hypotheses &#x2192; nextStep</div>
+        </li>
+        <li class="l-step">
+          <div class="l-step__title">State survives sessions</div>
+          <p class="l-step__body">
+            Each browser session maps to a dedicated Durable Object with its own SQLite database.
+            Close and reopen &#x2014; your incident is waiting exactly where you left it.
+          </p>
+          <div class="l-step__detail">getAgentByName(sessionUUID)</div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- State model -->
+    <section class="l-state" aria-labelledby="state-heading">
+      <div class="l-state__inner">
+        <div class="l-state__text">
+          <h2 id="state-heading">The incident model</h2>
+          <p>
+            Clara doesn&#x2019;t just generate text &#x2014; it maintains <strong>structured incident state</strong>.
+            The Inspector panel exposes exactly what Clara knows at any moment.
+          </p>
+          <p>
+            Connectivity fields are updated only when explicit evidence exists in the current message.
+            Fields with no new evidence are <strong>preserved from prior turns</strong>.
+          </p>
+          <p>
+            The hypothesis list is <strong>replaced in full</strong> each turn &#x2014; no stale hypotheses
+            survive new evidence.
+          </p>
+        </div>
+        <pre class="l-state__model" aria-label="Incident state structure"><code><span class="sm-key">messages</span>
+<span class="sm-note">  full conversation history</span>
+
+<span class="sm-key">connectivity</span>
+  <span class="sm-type">gateway</span>    <span class="sm-val">{ address?, status }</span>
+  <span class="sm-type">internetIp</span> <span class="sm-val">{ address?, status }</span>
+  <span class="sm-type">dns</span>        <span class="sm-val">{ status }</span>
+<span class="sm-sep"></span>
+<span class="sm-key">testsPerformed</span>
+<span class="sm-note">  latest result per type&#x2B;target</span>
+  <span class="sm-val">{ type, target?, result, summary }</span>
+<span class="sm-sep"></span>
+<span class="sm-key">hypotheses</span>
+<span class="sm-note">  current plausible causes &#x2014; replaced each turn</span>
+<span class="sm-sep"></span>
+<span class="sm-key">nextStep</span>
+<span class="sm-note">  single most useful next action</span></code></pre>
+      </div>
+    </section>
+
+    <!-- Architecture -->
+    <section class="l-arch" aria-labelledby="arch-heading">
+      <h2 class="l-section-h" id="arch-heading">Architecture</h2>
+      <div class="l-arch__diagram" role="img" aria-label="System architecture: Browser to Worker to Durable Object to Workers AI">
+        <div class="arch-node">
+          <div class="arch-node__label">Browser</div>
+          <div class="arch-node__sub">Vanilla JS &#xB7; session UUID</div>
+        </div>
+        <div class="arch-arrow" aria-hidden="true">&#x2192;</div>
+        <div class="arch-node">
+          <div class="arch-node__label">Cloudflare Worker</div>
+          <div class="arch-node__sub">/api/chat &#xB7; /api/history &#xB7; /api/summary</div>
+        </div>
+        <div class="arch-arrow" aria-hidden="true">&#x2192;</div>
+        <div class="arch-node arch-node--focus">
+          <div class="arch-node__label">FlareTraceAgent</div>
+          <div class="arch-node__sub">Durable Object &#xB7; SQLite state</div>
+        </div>
+        <div class="arch-arrow" aria-hidden="true">&#x2192;</div>
+        <div class="arch-node">
+          <div class="arch-node__label">Workers AI</div>
+          <div class="arch-node__sub">Llama 3.3 70B</div>
+        </div>
+      </div>
+      <p class="arch-note">
+        Each browser session generates a UUID. That UUID maps &#x2014; via <code>getAgentByName</code> from the
+        Cloudflare Agents SDK &#x2014; to one <code>FlareTraceAgent</code> Durable Object instance with its own
+        isolated SQLite database. Different sessions produce different instances with no shared state.
+      </p>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="l-footer">
+    <div class="l-footer__inner">
+      <a href="/" class="l-footer__brand">
+        <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+          <circle cx="9" cy="9" r="2.5" fill="currentColor"/>
+          <circle cx="2.5" cy="2.5" r="1.5" fill="currentColor" opacity="0.65"/>
+          <circle cx="15.5" cy="2.5" r="1.5" fill="currentColor" opacity="0.65"/>
+          <circle cx="2.5" cy="15.5" r="1.5" fill="currentColor" opacity="0.65"/>
+          <circle cx="15.5" cy="15.5" r="1.5" fill="currentColor" opacity="0.65"/>
+          <line x1="4" y1="4" x2="7" y2="7" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+          <line x1="14" y1="4" x2="11" y2="7" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+          <line x1="4" y1="14" x2="7" y2="11" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+          <line x1="14" y1="14" x2="11" y2="11" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
+        </svg>
+        FlareTrace
+      </a>
+      <span class="l-footer__meta">Cloudflare Workers AI Assignment &#xB7; 31 tests passing</span>
+      <div class="l-footer__links">
+        <a href="https://github.com/GeorgeET15/flaretrace" target="_blank" rel="noopener" class="l-footer__link">GitHub &#x2197;</a>
+        <a href="/app/" class="l-footer__link">Launch Clara &#x2192;</a>
+      </div>
+    </div>
+  </footer>
+
 </body>
 </html>
