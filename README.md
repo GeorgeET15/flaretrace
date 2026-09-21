@@ -208,12 +208,3 @@ AI-assisted coding was used during development, as explicitly permitted by the a
 
 All significant prompts used to build this project are recorded in [PROMPTS.md](PROMPTS.md).
 
----
-
-## Future Improvements
-
-- Streaming responses (chunked output as Clara reasons)
-- Structured router/switch log parsing
-- Packet capture analysis
-- Incident export (PDF or plain text)
-- Real network telemetry integrations
