@@ -73,13 +73,31 @@ function renderSessionsList() {
   const ul        = document.getElementById('sessions-list');
   while (ul.lastChild) ul.removeChild(ul.lastChild);
 
+  if (list.length > 0) {
+    const lbl = document.createElement('li');
+    lbl.className = 'sessions-section-label';
+    lbl.setAttribute('aria-hidden', 'true');
+    lbl.textContent = 'Recent';
+    ul.appendChild(lbl);
+  }
+
   for (const s of list) {
     const li = document.createElement('li');
     li.className = 'session-item' + (s.id === currentId ? ' active' : '');
 
-    const dot = document.createElement('span');
-    dot.className = 'session-item__dot';
-    dot.setAttribute('aria-hidden', 'true');
+    const iconSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    iconSvg.setAttribute('class', 'session-item__icon');
+    iconSvg.setAttribute('width', '14');
+    iconSvg.setAttribute('height', '14');
+    iconSvg.setAttribute('viewBox', '0 0 14 14');
+    iconSvg.setAttribute('fill', 'none');
+    iconSvg.setAttribute('aria-hidden', 'true');
+    const iconPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    iconPath.setAttribute('d', 'M7 1C3.686 1 1 3.238 1 6c0 1.41.638 2.677 1.664 3.582C2.52 10.7 2 12 2 12s1.56-.44 2.7-1.148A7.16 7.16 0 0 0 7 11c3.314 0 6-2.238 6-5s-2.686-5-6-5z');
+    iconPath.setAttribute('stroke', 'currentColor');
+    iconPath.setAttribute('stroke-width', '1.1');
+    iconPath.setAttribute('stroke-linejoin', 'round');
+    iconSvg.appendChild(iconPath);
 
     const label = document.createElement('span');
     label.className = 'session-item__label';
@@ -92,7 +110,7 @@ function renderSessionsList() {
     del.textContent = '×';
     del.addEventListener('click', (e) => { e.stopPropagation(); deleteSession(s.id); });
 
-    li.appendChild(dot);
+    li.appendChild(iconSvg);
     li.appendChild(label);
     li.appendChild(del);
     li.addEventListener('click', () => { if (s.id !== getSessionId()) switchSession(s.id); });
